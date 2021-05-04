@@ -195,7 +195,7 @@ void printChar(char c)
 		G_PORT |= G_PIN; // G high
 	if ( (c>>0) & 1 )
 		DP_PORT |= DP_PIN; // A high
-	delay_us(15);
+	delay_us(32);
 }
 
 /*
@@ -203,13 +203,13 @@ void printChar(char c)
  */
 void setDigit(char d)
 {
-	//delay_us(100);
+	delay_us(32);
 	Y1_PORT |= Y1_PIN; // Y1 high
 	Y2_PORT |= Y2_PIN; // Y2 high
 	Y3_PORT |= Y3_PIN; // Y3 high
 	Y4_PORT |= Y4_PIN; // Y4 high
 	printChar(SPACE);
-	//delay_us(1);
+	delay_us(8);
 	if (d==0)
 		Y1_PORT &= ~Y1_PIN; // Y1 low
 	else if (d==1)
@@ -263,7 +263,7 @@ void debug(int code)
 {
 	if (code>9999)
 		return;
-	for (uint16_t i=0; i<5000; i++){
+	for (uint16_t i=0; i<1000; i++){
 		setDigit(0);
 		printChar(numbers[code/1000]);
 		setDigit(1);
@@ -288,7 +288,7 @@ void display_temperature(uint16_t t, uint8_t is_negative, uint16_t times, uint8_
 			log_t2(tmp);
 		}
 	//Зниження тактової частоти
-	CLK_CKDIVR = 0b11101;
+	CLK_CKDIVR = 0b11001;
 	if (t>999)
 		t=999;
 	char first = 0;
@@ -510,6 +510,6 @@ int main(void)
         read_ds18b20(2);
         step--;
         if (step<0)
-			step = 64;
+			step = 127;
     }
 }
